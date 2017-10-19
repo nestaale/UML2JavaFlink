@@ -1,2 +1,2 @@
 @echo off
-javac -classpath ".\libs\*" .\src\UML2JavaTest1\main\Generate.java
+javac -classpath ".\libs\*" .\src\UML2JavaFlink\main\Generate.java
