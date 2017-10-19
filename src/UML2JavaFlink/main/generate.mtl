@@ -1,0 +1,137 @@
+[comment encoding = UTF-8 /]
+[module generate('http://www.eclipse.org/emf/2002/Ecore', 'http://www.eclipse.org/uml2/5.0.0/UML')]
+
+
+[template public generateElement(aModel : Model)]
+[comment @main/]
+
+[file (aModel.name.toLower().concat('/application/').concat(aModel.name.concat('.java')), false, 'UTF-8')]
+package [aModel.name.toLower().concat('.application')/];
+
+[for (c:Class | aModel.eContents(Class)) ]
+  [if c.name.strstr('DataTypes')]
+    [for (subc:Class | c.eContents(Class)) ]
+import [aModel.name.toLower()/].datatypes.[subc.name/];
+      [subc.datatypesgenerate()/]
+    [/for]
+  [else]
+     [for (object:EObject | c.getStereotypeApplications()) ]
+         [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
+         [if attribute.name.strstr('Function')]
+import [aModel.name.toLower()/].functions.[c.name/];
+            [c.functionsgenerate()/]
+         [/if]
+         [/for]
+     [/for]
+  [/if]
+[/for]
+
+public class [aModel.name/] {
+
+    public static void main(String['['/][']'/] args) throws Exception {
+
+       final StreamExcecutionEnvironment env = StreamExcecutionEnvironment
+               .getExcecutionEnvironment();
+
+       env.setParallelism(1);
+
+[for (c:Class | aModel.eContents(Class)) ]
+  [for (object:EObject | c.getStereotypeApplications()) ]
+    [if c.name.strstr('DataTypes')]
+    [elseif c.name.strstr('DataSource')]  
+       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
+                .setParallelism([object.eGet('parallelism')/]);
+
+    [elseif c.name.strstr('FileWriter')]
+       [c.getTargetDirectedRelationships().eGet('name')/]
+         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
+          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
+         [/if]
+          .writeAsText("[object.eGet('filepath')/]")
+          .setParallelism([object.eGet('parallelism')/]);
+    [else]
+       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
+         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
+          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
+         [/if]
+         [if object.eClass().name.strstr('FlatmapOperation')]
+          .flatMap(new [c.name/]())
+         [elseif object.eClass().name.strstr('SumOperation')]      
+          .sum("[object.eGet('field').eGet('name')/]")
+         [/if]
+          .setParallelism([object.eGet('parallelism')/]);
+
+    [/if]
+  [/for]
+[/for]
+    }
+
+    env.execute();
+}
+[/file]
+[/template]
+
+
+
+
+
+[template public functionsgenerate(aClass : Class)]
+[file (aClass.getModel().name.toLower().concat('/functions/').concat(aClass.name).concat('.java'), false)]
+package [aClass.getModel().name.toLower().concat('.functions')/];
+
+  [for (object:EObject | aClass.getStereotypeApplications()) ]
+    [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
+       [if attribute.name.strstr('Function')]
+public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFirst()/]<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+
+  @Override
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> out) {
+    [object.eGet(attribute)/]
+  }
+}
+      [/if]
+    [/for]
+  [/for]
+[/file]
+[/template]
+
+
+
+[template public datatypesgenerate(aClass : Class)]
+[file (aClass.getModel().name.toLower().concat('/datatypes/').concat(aClass.name).concat('.java'), false)]
+package [aClass.getModel().name.toLower().concat('.datatypes')/];
+
+public class [aClass.name/] {
+  [for (p: Property | aClass.attribute) separator('\n')]
+    private [p.type.name/] [p.name/];
+  [/for]
+ 
+    public [aClass.name/]() {
+
+    }
+
+    public [aClass.name/]([for (p: Property | aClass.attribute) separator(',')][p.type.name/] [p.name/][/for]) {
+    [for (p: Property | aClass.attribute)]
+        this.[p.name/] = [p.name/];
+    [/for]     
+    }
+
+    [for (p: Property | aClass.attribute) separator('\n')]
+    public [p.type.name/] get[p.name/]() {
+        return [p.name/];
+    }
+
+    public void set[p.name/]([p.type.name/] [p.name/]) {
+        this.[p.name/] = [p.name/];
+    }
+    [/for]
+ 
+    @Override
+    public String toString() {
+        return "(" + [for (p: Property | aClass.attribute) separator(' + ')]this.[p.name/][/for] + ")";
+    }
+
+}
+[/file]
+
+[/template]
