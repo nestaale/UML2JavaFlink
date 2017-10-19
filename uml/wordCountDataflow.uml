@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Dataflow="http:///schemas/Dataflow/_j6xfUGvEEeeNCPsCczzD3A/6" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/Dataflow/_j6xfUGvEEeeNCPsCczzD3A/6 dataflow.profile.uml#_j6ytcGvEEeeNCPsCczzD3A">
+  <uml:Model xmi:id="_u4upYGu-EeeNCPsCczzD3A" name="SocketWordCountDataflow">
+    <packagedElement xmi:type="uml:Class" xmi:id="_1TyoUGu-EeeNCPsCczzD3A" name="SocketWordCountDataTypes">
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_3N1TIGu-EeeNCPsCczzD3A" name="WordCount">
+        <ownedAttribute xmi:id="_d_Y4QGu_EeeNCPsCczzD3A" name="word">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:id="_foBqAGu_EeeNCPsCczzD3A" name="count">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+      </nestedClassifier>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_4EBUQGu-EeeNCPsCczzD3A" name="TextLineDataSource"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_6TGa8Gu-EeeNCPsCczzD3A" name="LineSplitter"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_9DxLwGu-EeeNCPsCczzD3A" name="WordCounter"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_-GaUgGu-EeeNCPsCczzD3A" name="CountsFileWriter"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_Bg8hsGu_EeeNCPsCczzD3A" name="text" informationSource="_4EBUQGu-EeeNCPsCczzD3A" informationTarget="_6TGa8Gu-EeeNCPsCczzD3A">
+      <conveyed xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_Ck21wGu_EeeNCPsCczzD3A" name="tokens" conveyed="_3N1TIGu-EeeNCPsCczzD3A" informationSource="_6TGa8Gu-EeeNCPsCczzD3A" informationTarget="_9DxLwGu-EeeNCPsCczzD3A"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_C8_B4Gu_EeeNCPsCczzD3A" name="counts" conveyed="_3N1TIGu-EeeNCPsCczzD3A" informationSource="_9DxLwGu-EeeNCPsCczzD3A" informationTarget="_-GaUgGu-EeeNCPsCczzD3A"/>
+    <profileApplication xmi:id="_yfPdEGu-EeeNCPsCczzD3A">
+      <eAnnotations xmi:id="_m7mzEGvEEeeNCPsCczzD3A" source="PapyrusVersion">
+        <details xmi:id="_m7mzEWvEEeeNCPsCczzD3A" key="Version" value="0.0.7"/>
+        <details xmi:id="_m7mzEmvEEeeNCPsCczzD3A" key="Comment" value=""/>
+        <details xmi:id="_m7mzE2vEEeeNCPsCczzD3A" key="Copyright" value=""/>
+        <details xmi:id="_m7mzFGvEEeeNCPsCczzD3A" key="Date" value="2017-07-18"/>
+        <details xmi:id="_m7mzFWvEEeeNCPsCczzD3A" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:id="_yfRSQGu-EeeNCPsCczzD3A" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="dataflow.profile.uml#_j6ytcGvEEeeNCPsCczzD3A"/>
+      </eAnnotations>
+      <appliedProfile href="dataflow.profile.uml#_Ke2mwGuREeeNCPsCczzD3A"/>
+    </profileApplication>
+    <profileApplication xmi:id="_a7zLcGu_EeeNCPsCczzD3A">
+      <eAnnotations xmi:id="_a70ZkGu_EeeNCPsCczzD3A" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="http://www.eclipse.org/uml2/5.0.0/UML/Profile/Standard#/"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UML_PROFILES/Standard.profile.uml#_0"/>
+    </profileApplication>
+  </uml:Model>
+  <Dataflow:DataflowDataTypes xmi:id="_lV-EQGu_EeeNCPsCczzD3A" base_Class="_1TyoUGu-EeeNCPsCczzD3A"/>
+  <Dataflow:SocketTextDataSource xmi:id="_mw8NcGu_EeeNCPsCczzD3A" base_Class="_4EBUQGu-EeeNCPsCczzD3A" parallelism="1" host="localhost" port="9999"/>
+  <Dataflow:FlatmapOperation xmi:id="_oyl8IGu_EeeNCPsCczzD3A" base_Class="_6TGa8Gu-EeeNCPsCczzD3A" parallelism="1" flatMapFunction="String[] tokens = value.toLowerCase().split(&quot;\\W+&quot;);&#xD;&#xA;&#xD;&#xA;for (String token : tokens) {&#xD;&#xA;    if (token.length() > 0) {&#xD;&#xA;        out.collect(new WordCount(token, 1));&#xD;&#xA;&#xD;&#xA;    }&#xD;&#xA;}"/>
+  <Dataflow:SumOperation xmi:id="_qNraEGu_EeeNCPsCczzD3A" base_Class="_9DxLwGu-EeeNCPsCczzD3A" parallelism="1" field="_foBqAGu_EeeNCPsCczzD3A"/>
+  <Dataflow:DataStream xmi:id="_2dpW4Gu_EeeNCPsCczzD3A" base_InformationFlow="_Bg8hsGu_EeeNCPsCczzD3A"/>
+  <Dataflow:KeyedDataStream xmi:id="_4HzyoGu_EeeNCPsCczzD3A" base_InformationFlow="_Ck21wGu_EeeNCPsCczzD3A" key="_d_Y4QGu_EeeNCPsCczzD3A"/>
+  <Dataflow:KeyedDataStream xmi:id="_7rBasGu_EeeNCPsCczzD3A" base_InformationFlow="_C8_B4Gu_EeeNCPsCczzD3A" key="_d_Y4QGu_EeeNCPsCczzD3A"/>
+  <Dataflow:TextFileDataSink xmi:id="_7rjM4GvEEeeNCPsCczzD3A" base_Class="_-GaUgGu-EeeNCPsCczzD3A" parallelism="1" filepath="/home/utente/word-count-output.txt"/>
+</xmi:XMI>
