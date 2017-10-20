@@ -79,6 +79,14 @@ public class [aModel.name/] {
 [file (aClass.getModel().name.toLower().concat('/functions/').concat(aClass.name).concat('.java'), false)]
 package [aClass.getModel().name.toLower().concat('.functions')/];
 
+  [for (c:Class | aClass.getModel().eContents(Class)) ]
+    [if c.name.strstr('DataTypes')]
+      [for (subc:Class | c.eContents(Class)) ]
+import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
+      [/for]
+    [/if]
+  [/for]
+
   [for (object:EObject | aClass.getStereotypeApplications()) ]
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
        [if attribute.name.strstr('Function')]
