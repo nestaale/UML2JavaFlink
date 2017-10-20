@@ -64,9 +64,9 @@ public class [aModel.name/] {
     [/if]
   [/for]
 [/for]
-    }
-
     env.execute();
+
+    }
 }
 [/file]
 [/template]
