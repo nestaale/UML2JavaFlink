@@ -25,6 +25,8 @@ import [aModel.name.toLower()/].functions.[c.name/];
      [/for]
   [/if]
 [/for]
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class [aModel.name/] {
 
@@ -65,7 +67,7 @@ public class [aModel.name/] {
   [/for]
 [/for]
 
-    env.execute();
+       env.execute();
 
     }
 }
