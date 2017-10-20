@@ -136,7 +136,7 @@ public class [aClass.name/] {
  
     @Override
     public String toString() {
-        return "(" + [for (p: Property | aClass.attribute) separator(' + ')]this.[p.name/][/for] + ")";
+        return "(" + [for (p: Property | aClass.attribute) separator(' + "," + ')]this.[p.name/][/for] + ")";
     }
 
 }
