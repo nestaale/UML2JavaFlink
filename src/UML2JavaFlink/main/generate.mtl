@@ -30,8 +30,8 @@ public class [aModel.name/] {
 
     public static void main(String['['/][']'/] args) throws Exception {
 
-       final StreamExcecutionEnvironment env = StreamExcecutionEnvironment
-               .getExcecutionEnvironment();
+       final StreamExecutionEnvironment env = StreamExecutionEnvironment
+               .getExecutionEnvironment();
 
        env.setParallelism(1);
 
