@@ -10,7 +10,7 @@ package [aModel.name.toLower().concat('.application')/];
 
 [for (c:Class | aModel.eContents(Class)) ]
   [if c.getStereotypeApplications().eClass().name = Bag{'DataflowDataTypes'}]
-    [for (subc:Class | c.eContents(Class)) ]
+     [for (subc:Class | c.eContents(Class)) ]
 import [aModel.name.toLower()/].datatypes.[subc.name/];
       [subc.datatypesgenerate()/]
     [/for]
@@ -39,7 +39,8 @@ public class [aModel.name/] {
 
 [for (c:Class | aModel.eContents(Class)) ]
   [for (object:EObject | c.getStereotypeApplications()) ]
-    [if c.name.strstr('DataTypes')]
+//[c.name/]
+    [if c.name.toLower().strstr('datatypes')]
     [elseif c.name.strstr('DataSource')]  
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
                 .setParallelism([object.eGet('parallelism')/]);
@@ -51,18 +52,32 @@ public class [aModel.name/] {
          [/if]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
-    [else]
+    [elseif c.getSourceDirectedRelationships().eGet('conveyed').name <> Bag{''} ]
+[c.getSourceDirectedRelationships().oclIsUndefined()/] <======
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
+//[c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name/]
+       [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
+          [if datastream.eClass().name = 'KeyedDataStream' ]
+          .keyBy("[datastream.eGet('key').eGet('name')/]")
+          [/if]
+          [if datastream.eClass().name = 'WindowedDataStream' ]
+//isSliding=[datastream.eGet('window').eGet('isSliding')/]
+          .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if]("Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])")
+         [/if]
+        [/for]
+        [if object.eClass().name.strstr('FlatmapOperation')]
+          .flatMap(new [c.name/]())
+        [elseif object.eClass().name.strstr('SumOperation')]      
+          .sum("[object.eGet('field').eGet('name')/]")
+        [/if]
+          .setParallelism([object.eGet('parallelism')/]);
+    [else]
+       [c.getTargetDirectedRelationships().eGet('name')/]
          [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
           .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
          [/if]
-         [if object.eClass().name.strstr('FlatmapOperation')]
-          .flatMap(new [c.name/]())
-         [elseif object.eClass().name.strstr('SumOperation')]      
-          .sum("[object.eGet('field').eGet('name')/]")
-         [/if]
+          .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
-
     [/if]
   [/for]
 [/for]
@@ -83,7 +98,7 @@ public class [aModel.name/] {
 package [aClass.getModel().name.toLower().concat('.functions')/];
 
   [for (c:Class | aClass.getModel().eContents(Class)) ]
-    [if c.name.strstr('DataTypes')]
+    [if c.getStereotypeApplications().eClass().name = Bag{'DataflowDataTypes'}]
       [for (subc:Class | c.eContents(Class)) ]
 import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
       [/for]
