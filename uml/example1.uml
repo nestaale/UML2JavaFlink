@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Dataflow="http:///schemas/Dataflow/_pFZl4L_eEee-Z6aj51LN0Q/17" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/Dataflow/_pFZl4L_eEee-Z6aj51LN0Q/17 dataflow.profile.uml#_pFaM8L_eEee-Z6aj51LN0Q">
+  <uml:Model xmi:id="_mCP0sL5vEeeec-L70t6MsQ" name="FinancialTransactionAnalyticsJob">
+    <packagedElement xmi:type="uml:Class" xmi:id="_UKWwoL5wEeeec-L70t6MsQ" name="TransactionParser"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_Y4XX4L5wEeeec-L70t6MsQ" name="ExpensesCalculator"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_vJ-YwL5wEeeec-L70t6MsQ" name="TransactionCounter"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_0V8uYL5wEeeec-L70t6MsQ" name="TopConsumersCounter"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_38QtwL5wEeeec-L70t6MsQ" name="TotalExpensesSink"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_8UOMgL5wEeeec-L70t6MsQ" name="NumberOfTransactionsSink"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_9-ANwL5wEeeec-L70t6MsQ" name="TopConsumersSink"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_7-b30L5yEeeec-L70t6MsQ" name="transactions" conveyed="_HAgeIL5zEeeec-L70t6MsQ" informationSource="_UKWwoL5wEeeec-L70t6MsQ" informationTarget="_Y4XX4L5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_8qFc4L5yEeeec-L70t6MsQ" name="transactions" conveyed="_HAgeIL5zEeeec-L70t6MsQ" informationSource="_UKWwoL5wEeeec-L70t6MsQ" informationTarget="_vJ-YwL5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_-F56oL5yEeeec-L70t6MsQ" name="nTransactions" conveyed="_MgLL0L5zEeeec-L70t6MsQ" informationSource="_vJ-YwL5wEeeec-L70t6MsQ" informationTarget="_8UOMgL5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_-zYEoL5yEeeec-L70t6MsQ" name="totalExpenses" visibility="public" conveyed="_JGZzoL5zEeeec-L70t6MsQ" informationSource="_Y4XX4L5wEeeec-L70t6MsQ" informationTarget="_0V8uYL5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="__YdusL5yEeeec-L70t6MsQ" name="totalExpenses" conveyed="_JGZzoL5zEeeec-L70t6MsQ" informationSource="_Y4XX4L5wEeeec-L70t6MsQ" informationTarget="_38QtwL5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_AbjjYL5zEeeec-L70t6MsQ" name="topConsumers" conveyed="_S7JrML5zEeeec-L70t6MsQ" informationSource="_0V8uYL5wEeeec-L70t6MsQ" informationTarget="_9-ANwL5wEeeec-L70t6MsQ"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_yhSLcL5zEeeec-L70t6MsQ" name="Example1Datatypes">
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_S7JrML5zEeeec-L70t6MsQ" name="TopConsumersCount">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_V68LML51Eeeec-L70t6MsQ" name="nTopConsumers">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_XkBo4L51Eeeec-L70t6MsQ" name="eventTime">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#ELong"/>
+        </ownedAttribute>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_MgLL0L5zEeeec-L70t6MsQ" name="TransactionCount">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_LCmIoL51Eeeec-L70t6MsQ" name="dataSubject">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_PGO9ML51Eeeec-L70t6MsQ" name="nTransactions">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_QzQfsL51Eeeec-L70t6MsQ" name="eventTime">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#ELong"/>
+        </ownedAttribute>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_JGZzoL5zEeeec-L70t6MsQ" name="TotalExpense">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_E4xqsL51Eeeec-L70t6MsQ" name="dataSubject">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_G9QD4L51Eeeec-L70t6MsQ" name="totalExpense">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_I2DYkL51Eeeec-L70t6MsQ" name="eventTime">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#ELong"/>
+        </ownedAttribute>
+      </nestedClassifier>
+      <nestedClassifier xmi:type="uml:Class" xmi:id="_HAgeIL5zEeeec-L70t6MsQ" name="FinancialTransaction" visibility="public">
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_IwQIAL50Eeeec-L70t6MsQ" name="transactionId">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_M2mSUL50Eeeec-L70t6MsQ" name="dataSubject">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_QlHygL50Eeeec-L70t6MsQ" name="amount">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#Integer"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_Vmn9gL50Eeeec-L70t6MsQ" name="recipient">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </ownedAttribute>
+        <ownedAttribute xmi:type="uml:Property" xmi:id="_iAcZ4L50Eeeec-L70t6MsQ" name="eventTime">
+          <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/EcorePrimitiveTypes.library.uml#ELong"/>
+        </ownedAttribute>
+      </nestedClassifier>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_lUxgEL8yEeeiPYi2CKr9zg" name="TransactionDataSource"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_oy3XkL8yEeeiPYi2CKr9zg" name="rawTransactions" informationSource="_lUxgEL8yEeeiPYi2CKr9zg" informationTarget="_UKWwoL5wEeeec-L70t6MsQ">
+      <conveyed xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </packagedElement>
+    <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_N7zsQL6HEeeiPYi2CKr9zg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qa288L_eEee-Z6aj51LN0Q" source="PapyrusVersion">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa288b_eEee-Z6aj51LN0Q" key="Version" value="0.0.18"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa288r_eEee-Z6aj51LN0Q" key="Comment" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa2887_eEee-Z6aj51LN0Q" key="Copyright" value=""/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa289L_eEee-Z6aj51LN0Q" key="Date" value="2017-11-02"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa289b_eEee-Z6aj51LN0Q" key="Author" value=""/>
+      </eAnnotations>
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_N706YL6HEeeiPYi2CKr9zg" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="dataflow.profile.uml#_pFaM8L_eEee-Z6aj51LN0Q"/>
+      </eAnnotations>
+      <appliedProfile xmi:type="uml:Profile" href="dataflow.profile.uml#_Ke2mwGuREeeNCPsCczzD3A"/>
+    </profileApplication>
+  </uml:Model>
+  <Dataflow:WindowedDataStream xmi:id="_cQeEsL6HEeeiPYi2CKr9zg" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_l04A0L9QEeeiPYi2CKr9zg">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_l-Lt0L9QEeeiPYi2CKr9zg" timeUnit="Minutes" size="5"/>
+      <slideSize xmi:type="Dataflow:WindowSize" xmi:id="_mGZOoL9QEeeiPYi2CKr9zg"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:SocketTextDataSource xmi:id="_Xj5LUL9MEeeiPYi2CKr9zg" base_Class="_lUxgEL8yEeeiPYi2CKr9zg" parallelism="1" host="127.0.0.1" port="9999"/>
+  <Dataflow:MapOperation xmi:id="_Y4RkUL9MEeeiPYi2CKr9zg" base_Class="_UKWwoL5wEeeec-L70t6MsQ" parallelism="4" mapFunction="        String[] fields = s.split(&quot;,&quot;);&#xA;        return new FinancialTransaction(&#xA;                fields[0],&#xA;                fields[1],&#xA;                fields[2],&#xA;                Long.parseLong(fields[3]),&#xA;                Integer.parseInt(fields[4]));"/>
+  <Dataflow:WindowFunction xmi:id="_lZIc0L9MEeeiPYi2CKr9zg" base_Class="_Y4XX4L5wEeeec-L70t6MsQ" applyFunction="        Integer sum = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            sum = sum + t.getAmount();&#xA;        }&#xA;        collector.collect(new TotalExpense((String) s.getField(0), sum, timeWindow.getEnd()));&#xA;   "/>
+  <Dataflow:WindowFunction xmi:id="_mye1YL9MEeeiPYi2CKr9zg" base_Class="_vJ-YwL5wEeeec-L70t6MsQ" applyFunction="        Integer count = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            count = count + 1;&#xA;        }&#xA;        collector.collect(new TransactionCount((String) s.getField(0), count, timeWindow.getEnd()));"/>
+  <Dataflow:WindowFunction xmi:id="_oQV6gL9MEeeiPYi2CKr9zg" base_Class="_0V8uYL5wEeeec-L70t6MsQ" applyFunction="        Map&lt;String, Integer> partialSum = new HashMap&lt;String, Integer>();&#xA;        Integer count = 0;&#xA;&#xA;        for(TotalExpense t: iterable){&#xA;            if(partialSum.containsKey(t.getDataSubject())){&#xA;                partialSum.put(t.getDataSubject(), partialSum.get(t.getDataSubject()) + t.getAmount());&#xA;            } else {&#xA;                partialSum.put(t.getDataSubject(), t.getAmount());&#xA;            }&#xA;        }&#xA;&#xA;        for(String ds: partialSum.keySet()) {&#xA;            if(partialSum.get(ds) > 1000) {&#xA;                count = count + 1;&#xA;            }&#xA;        }&#xA;&#xA;        collector.collect(new TopConsumersCount(count, timeWindow.getEnd()));"/>
+  <Dataflow:TextFileDataSink xmi:id="_tAZwML9MEeeiPYi2CKr9zg" base_Class="_38QtwL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/totalExpenses.txt"/>
+  <Dataflow:TextFileDataSink xmi:id="_udKCEL9MEeeiPYi2CKr9zg" base_Class="_9-ANwL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/topConsumers.txt"/>
+  <Dataflow:TextFileDataSink xmi:id="_voDu8L9MEeeiPYi2CKr9zg" base_Class="_8UOMgL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/nTransactions.txt"/>
+  <Dataflow:DataStream xmi:id="_zxzykL9MEeeiPYi2CKr9zg" base_InformationFlow="_oy3XkL8yEeeiPYi2CKr9zg"/>
+  <Dataflow:KeyedDataStream xmi:id="_1JhMYL9MEeeiPYi2CKr9zg" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
+  <Dataflow:KeyedDataStream xmi:id="_2fjLML9MEeeiPYi2CKr9zg" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
+  <Dataflow:WindowedDataStream xmi:id="_2gOgoL9MEeeiPYi2CKr9zg" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_VjFtAL9TEee-Z6aj51LN0Q">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_V74AcL9TEee-Z6aj51LN0Q" timeUnit="Minutes" size="5"/>
+      <slideSize xmi:type="Dataflow:WindowSize" xmi:id="_WWhVEL9TEee-Z6aj51LN0Q"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:WindowedDataStream xmi:id="_3zoCML9MEeeiPYi2CKr9zg" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_evAC8L9TEee-Z6aj51LN0Q">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_fcDWML9TEee-Z6aj51LN0Q" timeUnit="Minutes" size="30"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:KeyedDataStream xmi:id="_5W82IL9MEeeiPYi2CKr9zg" base_InformationFlow="_-F56oL5yEeeec-L70t6MsQ" key="_LCmIoL51Eeeec-L70t6MsQ"/>
+  <Dataflow:NonParallelDataStream xmi:id="_AKniUL9NEeeiPYi2CKr9zg" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ"/>
+  <Dataflow:KeyedDataStream xmi:id="_EZNpsL9NEeeiPYi2CKr9zg" base_InformationFlow="__YdusL5yEeeec-L70t6MsQ" key="_E4xqsL51Eeeec-L70t6MsQ"/>
+  <Dataflow:DataflowDataTypes xmi:id="_F45TwL9NEeeiPYi2CKr9zg" base_Class="_yhSLcL5zEeeec-L70t6MsQ"/>
+  <Dataflow:NonParallelDataStream xmi:id="_RKfVEL9TEee-Z6aj51LN0Q" base_InformationFlow="_AbjjYL5zEeeec-L70t6MsQ"/>
+</xmi:XMI>
