@@ -63,6 +63,7 @@ public class [aModel.name/] {
           [if datastream.eClass().name = 'WindowedDataStream' ]
 //isSliding=[datastream.eGet('window').eGet('isSliding')/]
           .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if]("Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])")
+          .apply(new [c.name/]())
          [/if]
         [/for]
         [if object.eClass().name.strstr('FlatmapOperation')]
