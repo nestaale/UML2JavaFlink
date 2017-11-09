@@ -39,13 +39,19 @@ public class [aModel.name/] {
 
 [for (c:Class | aModel.eContents(Class)) ]
   [for (object:EObject | c.getStereotypeApplications()) ]
-//[c.getStereotypeApplications().eClass().name/]
-    [if c.name.toLower().strstr('datatypes')]
-    [elseif c.name.strstr('DataSource')]  
+//[object.eClass().name/] object
+//[c.name/] c.name
+    [if object.eClass().name.strstr('DataTypes')]
+    [elseif object.eClass().name.strstr('DataSource')]  
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
                 .setParallelism([object.eGet('parallelism')/]);
 
-    [elseif c.name.strstr('FileWriter')]
+    [elseif object.eClass().name.strstr('MapOperation')]  
+       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
+          .map(new [c.name/]);
+          .assignTimestampsAndWatermarks();
+
+    [elseif object.eClass().name.strstr('FileWriter')]
        [c.getTargetDirectedRelationships().eGet('name')/]
          [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
           .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
@@ -59,6 +65,7 @@ public class [aModel.name/] {
          [/if]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
+
     [else]
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
 //[c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name/]
