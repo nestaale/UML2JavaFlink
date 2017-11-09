@@ -39,7 +39,7 @@ public class [aModel.name/] {
 
 [for (c:Class | aModel.eContents(Class)) ]
   [for (object:EObject | c.getStereotypeApplications()) ]
-//[c.name/]
+//[c.getStereotypeApplications().eClass().name/]
     [if c.name.toLower().strstr('datatypes')]
     [elseif c.name.strstr('DataSource')]  
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
@@ -52,8 +52,14 @@ public class [aModel.name/] {
          [/if]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
-    [elseif c.getSourceDirectedRelationships().eGet('conveyed').name <> Bag{''} ]
-[c.getSourceDirectedRelationships().oclIsUndefined()/] <======
+    [elseif object.eClass().name.strstr('TextFile') ]
+       [c.getTargetDirectedRelationships().eGet('name')/]
+         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
+          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
+         [/if]
+          .writeAsText("[object.eGet('filepath')/]")
+          .setParallelism([object.eGet('parallelism')/]);
+    [else]
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
 //[c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name/]
        [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
@@ -62,7 +68,7 @@ public class [aModel.name/] {
           [/if]
           [if datastream.eClass().name = 'WindowedDataStream' ]
 //isSliding=[datastream.eGet('window').eGet('isSliding')/]
-          .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if]("Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])")
+          .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
           .apply(new [c.name/]())
          [/if]
         [/for]
@@ -71,13 +77,6 @@ public class [aModel.name/] {
         [elseif object.eClass().name.strstr('SumOperation')]      
           .sum("[object.eGet('field').eGet('name')/]")
         [/if]
-          .setParallelism([object.eGet('parallelism')/]);
-    [else]
-       [c.getTargetDirectedRelationships().eGet('name')/]
-         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
-          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
-         [/if]
-          .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
     [/if]
   [/for]
