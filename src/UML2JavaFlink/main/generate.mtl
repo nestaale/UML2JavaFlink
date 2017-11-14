@@ -50,6 +50,7 @@ public class [aModel.name/] {
        DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
           .map(new [c.name/]);
           .assignTimestampsAndWatermarks();
+//to be asked...
 
     [elseif object.eClass().name.strstr('FileWriter')]
        [c.getTargetDirectedRelationships().eGet('name')/]
@@ -116,7 +117,10 @@ import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
        [if attribute.name.strstr('Function')]
 import org.apache.flink.api.common.functions.[attribute.name.toUpperFirst()/];
-      [/if]
+       [/if]       
+       [if attribute.name.equalsIgnoreCase('MapFunction')]
+import org.apache.flink.api.common.functions.RichMapFunction;
+       [/if]
     [/for]
   [/for]
 import org.apache.flink.util.Collector;
@@ -124,6 +128,7 @@ import org.apache.flink.util.Collector;
   [for (object:EObject | aClass.getStereotypeApplications()) ]
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
        [if attribute.name.strstr('Function')]
+         [if attribute.name.equalsIgnoreCase('FlatmapFunction')]
 public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFirst()/]<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
 
   @Override
@@ -131,6 +136,33 @@ public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFir
     [object.eGet(attribute)/]
   }
 }
+         [elseif attribute.name.equalsIgnoreCase('mapFunction')]
+public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+
+  @Override
+  public void open(Configuration parameters) throws Exception {
+
+  }
+
+  @Override
+  public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value) throws Exception {
+    [object.eGet(attribute)/]
+  }
+}
+         [elseif attribute.name.equalsIgnoreCase('applyFunction')]
+public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+
+  @Override
+  public void open(Configuration parameters) throws Exception {
+
+  }
+
+  @Override
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> out) {
+    [object.eGet(attribute)/]
+  }
+}
+         [/if]
       [/if]
     [/for]
   [/for]
