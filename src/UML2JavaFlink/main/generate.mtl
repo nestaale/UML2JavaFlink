@@ -43,33 +43,33 @@ public class [aModel.name/] {
 //[c.name/] c.name
     [if object.eClass().name.strstr('DataTypes')]
     [elseif object.eClass().name.strstr('DataSource')]  
-       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
+       DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
                 .setParallelism([object.eGet('parallelism')/]);
 
     [elseif object.eClass().name.strstr('MapOperation')]  
-       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
+       DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
           .map(new [c.name/]);
           .assignTimestampsAndWatermarks();
 //to be asked...
 
     [elseif object.eClass().name.strstr('FileWriter')]
-       [c.getTargetDirectedRelationships().eGet('name')/]
-         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
-          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
+       [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
+         [if c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'KeyedDataStream' ]
+          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eGet('key').eGet('name')/]")
          [/if]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
     [elseif object.eClass().name.strstr('TextFile') ]
        [c.getTargetDirectedRelationships().eGet('name')/]
-         [if c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name = Bag{'KeyedDataStream'} ]
-          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications().eGet('key').eGet('name')/]")
+         [if c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'KeyedDataStream' ]
+          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eGet('key').eGet('name')/]")
          [/if]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
 
     [else]
-       DataStream<[c.getSourceDirectedRelationships().eGet('conveyed').name/]> [c.getSourceDirectedRelationships().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
-//[c.getTargetDirectedRelationships().getStereotypeApplications().eClass().name/]
+       DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
+//[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name/]
        [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
           [if datastream.eClass().name = 'KeyedDataStream' ]
           .keyBy("[datastream.eGet('key').eGet('name')/]")
@@ -129,15 +129,15 @@ import org.apache.flink.util.Collector;
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
        [if attribute.name.strstr('Function')]
          [if attribute.name.equalsIgnoreCase('FlatmapFunction')]
-public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFirst()/]<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFirst()/]<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
 
   @Override
-  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> out) {
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> out) {
     [object.eGet(attribute)/]
   }
 }
          [elseif attribute.name.equalsIgnoreCase('mapFunction')]
-public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
 
   @Override
   public void open(Configuration parameters) throws Exception {
@@ -145,20 +145,22 @@ public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTa
   }
 
   @Override
-  public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value) throws Exception {
+  public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
     [object.eGet(attribute)/]
   }
 }
          [elseif attribute.name.equalsIgnoreCase('applyFunction')]
-public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> {
+public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
+  [for (checkKeyed:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
 
+  [/for]
   @Override
   public void open(Configuration parameters) throws Exception {
 
   }
 
   @Override
-  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships().eGet('conveyed').name/]> out) {
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> out) throws Exception {
     [object.eGet(attribute)/]
   }
 }
