@@ -49,22 +49,27 @@ public class [aModel.name/] {
     [elseif object.eClass().name.strstr('MapOperation')]  
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
           .map(new [c.name/]);
+          //.setParallelism([object.eGet('parallelism')/]);
           .assignTimestampsAndWatermarks();
 //to be asked...
 
     [elseif object.eClass().name.strstr('FileWriter')]
        [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
-         [if c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'KeyedDataStream' ]
-          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eGet('key').eGet('name')/]")
-         [/if]
+         [for (iskeyed:EObject | c.getTargetDirectedRelationships().getStereotypeApplications())]
+          [if iskeyed.eClass().name = 'KeyedDataStream' ]
+          .keyBy("[iskeyed.eGet('key').eGet('name')/]")
+          [/if]
+         [/for]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
-    [elseif object.eClass().name.strstr('TextFile') ]
+    [elseif object.eClass().name.strstr('TextFile')]
        [c.getTargetDirectedRelationships().eGet('name')/]
-         [if c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'KeyedDataStream' ]
-          .keyBy("[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eGet('key').eGet('name')/]")
-         [/if]
-          .writeAsText("[object.eGet('filepath')/]")
+         [for (iskeyed:EObject | c.getTargetDirectedRelationships().getStereotypeApplications())]
+          [if iskeyed.eClass().name = 'KeyedDataStream' ]
+          .keyBy("[iskeyed.eGet('key').eGet('name')/]")
+          [/if]
+         [/for]
+          AsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
 
     [else]
@@ -121,6 +126,13 @@ import org.apache.flink.api.common.functions.[attribute.name.toUpperFirst()/];
        [if attribute.name.equalsIgnoreCase('MapFunction')]
 import org.apache.flink.api.common.functions.RichMapFunction;
        [/if]
+       [if attribute.name.equalsIgnoreCase('applyFunction')]
+import org.apache.flink.api.java.tuple.Tuple; //only for Windowfunction
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.functions.windowing.RichAllWindowFunction;
+import org.apache.flink.streaming.api.functions.windowing.RichWindowFunction; //only for Windowfunction
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+       [/if]
     [/for]
   [/for]
 import org.apache.flink.util.Collector;
@@ -151,9 +163,16 @@ public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTa
 }
          [elseif attribute.name.equalsIgnoreCase('applyFunction')]
 public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
-  [for (checkKeyed:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
 
-  [/for]
+         [for (iskeyed:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
+          [if iskeyed.eClass().name = 'KeyedDataStream' ]
+          //.keyBy("[iskeyed.eGet('key').eGet('name')/]") TRUE  [iskeyed.eClass().name/]
+          [else]
+          //FALSE [iskeyed.eClass().name/]
+          [/if]
+         [/for]
+          //richwindowfunction se e' keyed, richall altrimenti.....
+
   @Override
   public void open(Configuration parameters) throws Exception {
 
