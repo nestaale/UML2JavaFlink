@@ -50,8 +50,6 @@ public class [aModel.name/] {
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
           .map(new [c.name/]);
           //.setParallelism([object.eGet('parallelism')/]);
-          .assignTimestampsAndWatermarks();
-//to be asked...
 
     [elseif object.eClass().name.strstr('FileWriter')]
        [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
