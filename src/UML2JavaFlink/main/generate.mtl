@@ -9,17 +9,15 @@
 package [aModel.name.toLower().concat('.application')/];
 
 [for (c:Class | aModel.eContents(Class)) ]
-  [if c.getStereotypeApplications().eClass().name = Bag{'DataflowDataTypes'}]
+  [if c.getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'DataflowDataTypes']
      [for (subc:Class | c.eContents(Class)) ]
-import [aModel.name.toLower()/].datatypes.[subc.name/];
-      [subc.datatypesgenerate()/]
+import [aModel.name.toLower()/].datatypes.[subc.name/]; [subc.datatypesgenerate()/]
     [/for]
   [else]
      [for (object:EObject | c.getStereotypeApplications()) ]
          [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
          [if attribute.name.strstr('Function')]
-import [aModel.name.toLower()/].functions.[c.name/];
-            [c.functionsgenerate()/]
+import [aModel.name.toLower()/].functions.[c.name/]; [c.functionsgenerate()/]
          [/if]
          [/for]
      [/for]
@@ -27,6 +25,7 @@ import [aModel.name.toLower()/].functions.[c.name/];
 [/for]
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.time.Time;
 
 public class [aModel.name/] {
 
@@ -40,8 +39,6 @@ public class [aModel.name/] {
 
 [for (c:Class | aModel.eContents(Class)) ]
   [for (object:EObject | c.getStereotypeApplications()) ]
-//[object.eClass().name/] object
-//[c.name/] c.name
     [if object.eClass().name.strstr('DataTypes')]
     [elseif object.eClass().name.strstr('DataSource')]  
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
@@ -61,6 +58,7 @@ public class [aModel.name/] {
          [/for]
           .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
+
     [elseif object.eClass().name.strstr('TextFile')]
        [c.getTargetDirectedRelationships().eGet('name')/]
          [for (iskeyed:EObject | c.getTargetDirectedRelationships().getStereotypeApplications())]
@@ -73,13 +71,11 @@ public class [aModel.name/] {
 
     [else]
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
-//[c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name/]
        [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
           [if datastream.eClass().name = 'KeyedDataStream' ]
           .keyBy("[datastream.eGet('key').eGet('name')/]")
           [/if]
           [if datastream.eClass().name = 'WindowedDataStream' ]
-//isSliding=[datastream.eGet('window').eGet('isSliding')/]
           .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
           .apply(new [c.name/]())
          [/if]
@@ -90,6 +86,7 @@ public class [aModel.name/] {
           .sum("[object.eGet('field').eGet('name')/]")
         [/if]
           .setParallelism([object.eGet('parallelism')/]);
+
     [/if]
   [/for]
 [/for]
@@ -244,5 +241,4 @@ public class [aClass.name/] {
 
 }
 [/file]
-
 [/template]
