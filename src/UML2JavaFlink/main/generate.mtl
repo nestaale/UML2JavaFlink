@@ -119,17 +119,23 @@ import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
 
   [for (object:EObject | aClass.getStereotypeApplications()) ]
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
-       [if attribute.name.strstr('Function')]
-import org.apache.flink.api.common.functions.[attribute.name.toUpperFirst()/];
+       [if attribute.name.equalsIgnoreCase('FlatMapFunction')]
+import org.apache.flink.api.common.functions.FlatMapFunction;
        [/if]       
        [if attribute.name.equalsIgnoreCase('MapFunction')]
 import org.apache.flink.api.common.functions.RichMapFunction;
        [/if]
        [if attribute.name.equalsIgnoreCase('applyFunction')]
-import org.apache.flink.api.java.tuple.Tuple; //only for Windowfunction
 import org.apache.flink.configuration.Configuration;
+         [for (dstype:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
+		  [if (dstype.eClass().name = 'WindowedDataStream')]
+          [elseif (dstype.eClass().name = 'KeyedDataStream')]
+import org.apache.flink.api.java.tuple.Tuple;
+import org.apache.flink.streaming.api.functions.windowing.RichWindowFunction;
+          [else]
 import org.apache.flink.streaming.api.functions.windowing.RichAllWindowFunction;
-import org.apache.flink.streaming.api.functions.windowing.RichWindowFunction; //only for Windowfunction
+          [/if]
+         [/for]
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
        [/if]
     [/for]
@@ -138,6 +144,11 @@ import org.apache.flink.util.Collector;
 
   [for (object:EObject | aClass.getStereotypeApplications()) ]
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
+[if (object.eGet(attribute).toString().strstr('Map'))]
+import java.util.HashMap;
+import java.util.Map;
+[/if]
+
        [if attribute.name.strstr('Function')]
          [if attribute.name.equalsIgnoreCase('FlatmapFunction')]
 public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFirst()/]<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
@@ -151,27 +162,20 @@ public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFir
 public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
 
   @Override
-  public void open(Configuration parameters) throws Exception {
-
-  }
-
-  @Override
   public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
     [object.eGet(attribute)/]
   }
 }
          [elseif attribute.name.equalsIgnoreCase('applyFunction')]
-public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
-
-         [for (iskeyed:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
-          [if iskeyed.eClass().name = 'KeyedDataStream' ]
-          //.keyBy("[iskeyed.eGet('key').eGet('name')/]") TRUE  [iskeyed.eClass().name/]
+         [for (dstype:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
+		  [if (dstype.eClass().name = 'WindowedDataStream')]
+          [elseif (dstype.eClass().name = 'KeyedDataStream')]
+public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], Tuple, TimeWindow> {
           [else]
-          //FALSE [iskeyed.eClass().name/]
+public class [aClass.name.toUpperFirst()/] extends RichAllWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], TimeWindow> {
           [/if]
          [/for]
           //richwindowfunction se e' keyed, richall altrimenti.....
-
   @Override
   public void open(Configuration parameters) throws Exception {
 
