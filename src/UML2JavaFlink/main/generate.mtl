@@ -11,15 +11,13 @@ package [aModel.name.toLower().concat('.application')/];
 [for (c:Class | aModel.eContents(Class)) ]
   [if c.getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'DataflowDataTypes']
      [for (subc:Class | c.eContents(Class)) ]
-import [aModel.name.toLower()/].datatypes.[subc.name/];
-[subc.datatypesgenerate()/]
+import [aModel.name.toLower()/].datatypes.[subc.name/]; [subc.datatypesgenerate()/]
     [/for]
   [else]
      [for (object:EObject | c.getStereotypeApplications()) ]
          [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
          [if attribute.name.strstr('Function')]
-import [aModel.name.toLower()/].functions.[c.name/];
-[c.functionsgenerate()/]
+import [aModel.name.toLower()/].functions.[c.name/]; [c.functionsgenerate()/]
          [/if]
          [/for]
      [/for]
