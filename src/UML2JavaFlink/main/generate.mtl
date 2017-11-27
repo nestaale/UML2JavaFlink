@@ -152,7 +152,7 @@ public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFir
 
   @Override
   public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> out) {
-    [object.eGet(attribute)/]
+    [object.eGet(attribute).toString().substituteAll('\n', '\n    ')/]
   }
 }
          [elseif attribute.name.equalsIgnoreCase('mapFunction')]
@@ -160,7 +160,7 @@ public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTa
 
   @Override
   public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
-    [object.eGet(attribute)/]
+    [object.eGet(attribute).toString().substituteAll('\n', '\n    ')/]
   }
 }
          [elseif attribute.name.equalsIgnoreCase('applyFunction')]
