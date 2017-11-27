@@ -110,7 +110,7 @@ public class [aModel.name/] {
 package [aClass.getModel().name.toLower().concat('.functions')/];
 
   [for (c:Class | aClass.getModel().eContents(Class)) ]
-    [if c.getStereotypeApplications().eClass().name = Bag{'DataflowDataTypes'}]
+    [if c.getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'DataflowDataTypes']
       [for (subc:Class | c.eContents(Class)) ]
 import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
       [/for]
@@ -174,15 +174,27 @@ public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.ge
           [else]
 public class [aClass.name.toUpperFirst()/] extends RichAllWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], TimeWindow> {
           [/if]
-         [/for]
-          //richwindowfunction se e' keyed, richall altrimenti.....
+        [/for]
+
   @Override
   public void open(Configuration parameters) throws Exception {
 
   }
 
   @Override
+[if attribute.name.strstr('mapFunction')]
   public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> out) throws Exception {
+[elseif attribute.name.equalsIgnoreCase('applyFunction')]
+         [for (dstype:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
+		  [if (dstype.eClass().name = 'WindowedDataStream')]
+          [elseif (dstype.eClass().name = 'KeyedDataStream')]
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] (Tuple value, TimeWindow timeWindow, Iterable<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> iterable, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> collector) throws Exception {
+          [else]
+  public void [attribute.name.substring(1,attribute.name.size()-8)/] (TimeWindow timeWindow, Iterable<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> iterable, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> collector) throws Exception {
+          [/if]
+         [/for]
+
+[/if]
     [object.eGet(attribute)/]
   }
 }
