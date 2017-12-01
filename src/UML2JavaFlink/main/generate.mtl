@@ -76,6 +76,9 @@ public class [aModel.name/] {
           .keyBy("[datastream.eGet('key').eGet('name')/]")
           [/if]
           [if datastream.eClass().name = 'WindowedDataStream' ]
+//isSliding=[datastream.eGet('window').eGet('isSliding')/]
+//isSessionInEventTime=[datastream.eGet('window').eGet('isSessionInEventTime')/]
+//isSessionInProcessingTime=[datastream.eGet('window').eGet('isSessionInProcessingTime')/]
           .timeWindow[if datastream.eGet('window').eGet('isSliding') = true]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
           .apply(new [c.name/]())
          [/if]
