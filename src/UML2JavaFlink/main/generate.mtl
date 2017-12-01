@@ -46,7 +46,7 @@ public class [aModel.name/] {
 
     [elseif object.eClass().name.strstr('MapOperation')]  
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships().eGet('name')/]
-          .map(new [c.name/]);
+          .map(new [c.name/]());
           //.setParallelism([object.eGet('parallelism')/]);
 
     [elseif object.eClass().name.strstr('FileWriter')]
@@ -176,7 +176,7 @@ public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTa
   }
 
   @Override
-  public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
+  public [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
     [object.eGet(attribute).toString().substituteAll('\n', '\n    ')/]
   }
 }
