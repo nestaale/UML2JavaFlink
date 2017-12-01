@@ -66,7 +66,7 @@ public class [aModel.name/] {
           .keyBy("[iskeyed.eGet('key').eGet('name')/]")
           [/if]
          [/for]
-          writeAsText("[object.eGet('filepath')/]")
+          .writeAsText("[object.eGet('filepath')/]")
           .setParallelism([object.eGet('parallelism')/]);
 
     [else]
@@ -132,6 +132,7 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
        [/if]       
        [if attribute.name.equalsIgnoreCase('MapFunction')]
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.configuration.Configuration;
        [/if]
        [if attribute.name.equalsIgnoreCase('applyFunction')]
 import org.apache.flink.configuration.Configuration;
@@ -168,6 +169,11 @@ public class [aClass.name.toUpperFirst()/] implements [attribute.name.toUpperFir
 }
          [elseif attribute.name.equalsIgnoreCase('mapFunction')]
 public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> {
+
+  @Override
+  public void open(Configuration parameters) throws Exception {
+
+  }
 
   @Override
   public [aClass.getSourceDirectedRelationships().eGet('conveyed').name/] [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value) throws Exception {
