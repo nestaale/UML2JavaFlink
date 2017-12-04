@@ -239,11 +239,11 @@ public class [aClass.name/] {
     }
 
     [for (p: Property | aClass.attribute) separator('\n')]
-    public [p.type.name/] get[p.name/]() {
+    public [p.type.name/] get[p.name.toUpperFirst()/]() {
         return [p.name/];
     }
 
-    public void set[p.name/]([p.type.name/] [p.name/]) {
+    public void set[p.name.toUpperFirst()/]([p.type.name/] [p.name/]) {
         this.[p.name/] = [p.name/];
     }
     [/for]
