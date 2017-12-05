@@ -225,25 +225,25 @@ package [aClass.getModel().name.toLower().concat('.datatypes')/];
 public class [aClass.name/] {
 
   [for (p: Property | aClass.attribute) separator('\n')]
-    private [p.type.name/] [p.name/];
+    private [p.type.name.substitute('ELong', 'Long')/] [p.name/];
   [/for]
  
     public [aClass.name/]() {
 
     }
 
-    public [aClass.name/]([for (p: Property | aClass.attribute) separator(', ')][p.type.name/] [p.name/][/for]) {
+    public [aClass.name/]([for (p: Property | aClass.attribute) separator(', ')][p.type.name.substitute('ELong', 'Long')/] [p.name/][/for]) {
     [for (p: Property | aClass.attribute)]
         this.[p.name/] = [p.name/];
     [/for]     
     }
 
     [for (p: Property | aClass.attribute) separator('\n')]
-    public [p.type.name/] get[p.name.toUpperFirst()/]() {
+    public [p.type.name.substitute('ELong', 'Long')/] get[p.name.toUpperFirst()/]() {
         return [p.name/];
     }
 
-    public void set[p.name.toUpperFirst()/]([p.type.name/] [p.name/]) {
+    public void set[p.name.toUpperFirst()/]([p.type.name.substitute('ELong', 'Long')/] [p.name/]) {
         this.[p.name/] = [p.name/];
     }
     [/for]
