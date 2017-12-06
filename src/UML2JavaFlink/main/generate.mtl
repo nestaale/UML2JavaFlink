@@ -77,6 +77,7 @@ public class [aModel.name/] {
           [/if]
           [if datastream.eClass().name = 'WindowedDataStream' ]
             [if datastream.eGet('window').eGet('isSessionInEventTime') = false]
+   //[c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name/]
               [if datastream.eGet('window').eGet('isSliding') = false]
           .timeWindow[if (c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
               [else]
