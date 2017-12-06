@@ -81,37 +81,35 @@
       <appliedProfile xmi:type="uml:Profile" href="dataflow.profile.uml#_Ke2mwGuREeeNCPsCczzD3A"/>
     </profileApplication>
   </uml:Model>
-  <Dataflow:WindowedDataStream xmi:id="_cQeEsL6HEeeiPYi2CKr9zg" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ">
-    <window xmi:type="Dataflow:Window" xmi:id="_l04A0L9QEeeiPYi2CKr9zg">
-      <size xmi:type="Dataflow:WindowSize" xmi:id="_l-Lt0L9QEeeiPYi2CKr9zg" timeUnit="Minutes" size="5"/>
-      <slideSize xmi:type="Dataflow:WindowSize" xmi:id="_mGZOoL9QEeeiPYi2CKr9zg"/>
-    </window>
-  </Dataflow:WindowedDataStream>
   <Dataflow:SocketTextDataSource xmi:id="_Xj5LUL9MEeeiPYi2CKr9zg" base_Class="_lUxgEL8yEeeiPYi2CKr9zg" parallelism="1" host="127.0.0.1" port="9999"/>
-  <Dataflow:MapOperation xmi:id="_Y4RkUL9MEeeiPYi2CKr9zg" base_Class="_UKWwoL5wEeeec-L70t6MsQ" parallelism="4" mapFunction="        String[] fields = s.split(&quot;,&quot;);&#xA;        return new FinancialTransaction(&#xA;                fields[0],&#xA;                fields[1],&#xA;                fields[2],&#xA;                Long.parseLong(fields[3]),&#xA;                Integer.parseInt(fields[4]));"/>
-  <Dataflow:WindowFunction xmi:id="_lZIc0L9MEeeiPYi2CKr9zg" base_Class="_Y4XX4L5wEeeec-L70t6MsQ" applyFunction="        Integer sum = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            sum = sum + t.getAmount();&#xA;        }&#xA;        collector.collect(new TotalExpense((String) s.getField(0), sum, timeWindow.getEnd()));&#xA;   "/>
-  <Dataflow:WindowFunction xmi:id="_mye1YL9MEeeiPYi2CKr9zg" base_Class="_vJ-YwL5wEeeec-L70t6MsQ" applyFunction="        Integer count = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            count = count + 1;&#xA;        }&#xA;        collector.collect(new TransactionCount((String) s.getField(0), count, timeWindow.getEnd()));"/>
-  <Dataflow:WindowFunction xmi:id="_oQV6gL9MEeeiPYi2CKr9zg" base_Class="_0V8uYL5wEeeec-L70t6MsQ" applyFunction="        Map&lt;String, Integer> partialSum = new HashMap&lt;String, Integer>();&#xA;        Integer count = 0;&#xA;&#xA;        for(TotalExpense t: iterable){&#xA;            if(partialSum.containsKey(t.getDataSubject())){&#xA;                partialSum.put(t.getDataSubject(), partialSum.get(t.getDataSubject()) + t.getAmount());&#xA;            } else {&#xA;                partialSum.put(t.getDataSubject(), t.getAmount());&#xA;            }&#xA;        }&#xA;&#xA;        for(String ds: partialSum.keySet()) {&#xA;            if(partialSum.get(ds) > 1000) {&#xA;                count = count + 1;&#xA;            }&#xA;        }&#xA;&#xA;        collector.collect(new TopConsumersCount(count, timeWindow.getEnd()));"/>
+  <Dataflow:MapOperation xmi:id="_Y4RkUL9MEeeiPYi2CKr9zg" base_Class="_UKWwoL5wEeeec-L70t6MsQ" parallelism="1" mapFunction="            String[] fields = value.split(&quot;,&quot;);&#xA;            return new FinancialTransaction(&#xA;                    fields[0],&#xA;                    fields[1],&#xA;                    Integer.parseInt(fields[2]),&#xA;                    fields[3],&#xA;                    Long.parseLong(fields[4])&#xA;                    );"/>
+  <Dataflow:WindowFunction xmi:id="_lZIc0L9MEeeiPYi2CKr9zg" base_Class="_Y4XX4L5wEeeec-L70t6MsQ" parallelism="1" applyFunction="        Integer sum = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            sum = sum + t.getAmount();&#xA;        }&#xA;        collector.collect(new TotalExpense((String) value.getField(0), sum, timeWindow.getEnd()));&#xA;   "/>
+  <Dataflow:WindowFunction xmi:id="_mye1YL9MEeeiPYi2CKr9zg" base_Class="_vJ-YwL5wEeeec-L70t6MsQ" parallelism="1" applyFunction="        Integer count = 0;&#xA;        for(FinancialTransaction t: iterable){&#xA;            count = count + 1;&#xA;        }&#xA;        collector.collect(new TransactionCount((String) value.getField(0), count, timeWindow.getEnd()));"/>
+  <Dataflow:WindowFunction xmi:id="_oQV6gL9MEeeiPYi2CKr9zg" base_Class="_0V8uYL5wEeeec-L70t6MsQ" parallelism="1" applyFunction="            Map&lt;String, Integer> partialSum = new HashMap&lt;String, Integer>();&#xA;            Integer count = 0;&#xA;    &#xA;            for(TotalExpense t: iterable){&#xA;                if(partialSum.containsKey(t.getDataSubject())){&#xA;                    partialSum.put(t.getDataSubject(), partialSum.get(t.getDataSubject()) + t.getTotalExpense());&#xA;                } else {&#xA;                    partialSum.put(t.getDataSubject(), t.getTotalExpense());&#xA;                }&#xA;            }&#xA;    &#xA;            for(String ds: partialSum.keySet()) {&#xA;                if(partialSum.get(ds) > 1000) {&#xA;                    count = count + 1;&#xA;                }&#xA;            }&#xA;    &#xA;            collector.collect(new TopConsumersCount(count, timeWindow.getEnd()));"/>
   <Dataflow:TextFileDataSink xmi:id="_tAZwML9MEeeiPYi2CKr9zg" base_Class="_38QtwL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/totalExpenses.txt"/>
   <Dataflow:TextFileDataSink xmi:id="_udKCEL9MEeeiPYi2CKr9zg" base_Class="_9-ANwL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/topConsumers.txt"/>
   <Dataflow:TextFileDataSink xmi:id="_voDu8L9MEeeiPYi2CKr9zg" base_Class="_8UOMgL5wEeeec-L70t6MsQ" parallelism="1" filepath="/home/utente/nTransactions.txt"/>
   <Dataflow:DataStream xmi:id="_zxzykL9MEeeiPYi2CKr9zg" base_InformationFlow="_oy3XkL8yEeeiPYi2CKr9zg"/>
-  <Dataflow:KeyedDataStream xmi:id="_1JhMYL9MEeeiPYi2CKr9zg" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
-  <Dataflow:KeyedDataStream xmi:id="_2fjLML9MEeeiPYi2CKr9zg" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
-  <Dataflow:WindowedDataStream xmi:id="_2gOgoL9MEeeiPYi2CKr9zg" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ">
-    <window xmi:type="Dataflow:Window" xmi:id="_VjFtAL9TEee-Z6aj51LN0Q">
-      <size xmi:type="Dataflow:WindowSize" xmi:id="_V74AcL9TEee-Z6aj51LN0Q" timeUnit="Minutes" size="5"/>
-      <slideSize xmi:type="Dataflow:WindowSize" xmi:id="_WWhVEL9TEee-Z6aj51LN0Q"/>
-    </window>
-  </Dataflow:WindowedDataStream>
-  <Dataflow:WindowedDataStream xmi:id="_3zoCML9MEeeiPYi2CKr9zg" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ">
-    <window xmi:type="Dataflow:Window" xmi:id="_evAC8L9TEee-Z6aj51LN0Q">
-      <size xmi:type="Dataflow:WindowSize" xmi:id="_fcDWML9TEee-Z6aj51LN0Q" timeUnit="Minutes" size="30"/>
-    </window>
-  </Dataflow:WindowedDataStream>
-  <Dataflow:KeyedDataStream xmi:id="_5W82IL9MEeeiPYi2CKr9zg" base_InformationFlow="_-F56oL5yEeeec-L70t6MsQ" key="_LCmIoL51Eeeec-L70t6MsQ"/>
-  <Dataflow:NonParallelDataStream xmi:id="_AKniUL9NEeeiPYi2CKr9zg" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ"/>
-  <Dataflow:KeyedDataStream xmi:id="_EZNpsL9NEeeiPYi2CKr9zg" base_InformationFlow="__YdusL5yEeeec-L70t6MsQ" key="_E4xqsL51Eeeec-L70t6MsQ"/>
   <Dataflow:DataflowDataTypes xmi:id="_F45TwL9NEeeiPYi2CKr9zg" base_Class="_yhSLcL5zEeeec-L70t6MsQ"/>
-  <Dataflow:NonParallelDataStream xmi:id="_RKfVEL9TEee-Z6aj51LN0Q" base_InformationFlow="_AbjjYL5zEeeec-L70t6MsQ"/>
+  <Dataflow:KeyedDataStream xmi:id="_d96gsNngEeenW6PQeCFDhw" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
+  <Dataflow:WindowedDataStream xmi:id="_d_GzgNngEeenW6PQeCFDhw" base_InformationFlow="_7-b30L5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_hwtc4NngEeenW6PQeCFDhw">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_h-9UQNngEeenW6PQeCFDhw" size="3"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:NonParallelDataStream xmi:id="_nEZkENngEeenW6PQeCFDhw" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ"/>
+  <Dataflow:WindowedDataStream xmi:id="_nFgXUNngEeenW6PQeCFDhw" base_InformationFlow="_-zYEoL5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_oHmtgNngEeenW6PQeCFDhw">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_od0OENngEeenW6PQeCFDhw" size="9"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:DataStream xmi:id="_tkQjcNngEeenW6PQeCFDhw" base_InformationFlow="__YdusL5yEeeec-L70t6MsQ"/>
+  <Dataflow:DataStream xmi:id="_w1dOcNngEeenW6PQeCFDhw" base_InformationFlow="_-F56oL5yEeeec-L70t6MsQ"/>
+  <Dataflow:WindowedDataStream xmi:id="_zndcANngEeenW6PQeCFDhw" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ">
+    <window xmi:type="Dataflow:Window" xmi:id="_0MFzENngEeenW6PQeCFDhw">
+      <size xmi:type="Dataflow:WindowSize" xmi:id="_00pA0NngEeenW6PQeCFDhw" size="3"/>
+    </window>
+  </Dataflow:WindowedDataStream>
+  <Dataflow:KeyedDataStream xmi:id="_zoWM0NngEeenW6PQeCFDhw" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
+  <Dataflow:DataStream xmi:id="_QNsboNnsEeenW6PQeCFDhw" base_InformationFlow="_AbjjYL5zEeeec-L70t6MsQ"/>
 </xmi:XMI>
