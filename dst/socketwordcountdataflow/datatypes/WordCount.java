@@ -1,6 +1,7 @@
 package socketwordcountdataflow.datatypes;
 
 public class WordCount {
+
     private String word;
 
     private Integer count;
@@ -9,7 +10,7 @@ public class WordCount {
 
     }
 
-    public WordCount(String word,Integer count) {
+    public WordCount(String word, Integer count) {
         this.word = word;
         this.count = count;
     }
@@ -32,7 +33,7 @@ public class WordCount {
  
     @Override
     public String toString() {
-        return "(" + this.word + this.count + ")";
+        return "(" + this.word + "," + this.count + ")";
     }
 
 }

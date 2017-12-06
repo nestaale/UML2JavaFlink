@@ -4,30 +4,30 @@ public class TopConsumersCount {
 
     private Integer nTopConsumers;
 
-    private ELong eventTime;
+    private Long eventTime;
  
     public TopConsumersCount() {
 
     }
 
-    public TopConsumersCount(Integer nTopConsumers, ELong eventTime) {
+    public TopConsumersCount(Integer nTopConsumers, Long eventTime) {
         this.nTopConsumers = nTopConsumers;
         this.eventTime = eventTime;
     }
 
-    public Integer getnTopConsumers() {
+    public Integer getNTopConsumers() {
         return nTopConsumers;
     }
 
-    public void setnTopConsumers(Integer nTopConsumers) {
+    public void setNTopConsumers(Integer nTopConsumers) {
         this.nTopConsumers = nTopConsumers;
     }
 
-    public ELong geteventTime() {
+    public Long getEventTime() {
         return eventTime;
     }
 
-    public void seteventTime(ELong eventTime) {
+    public void setEventTime(Long eventTime) {
         this.eventTime = eventTime;
     }
  

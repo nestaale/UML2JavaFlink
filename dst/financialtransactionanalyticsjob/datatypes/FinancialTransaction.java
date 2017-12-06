@@ -10,13 +10,13 @@ public class FinancialTransaction {
 
     private String recipient;
 
-    private ELong eventTime;
+    private Long eventTime;
  
     public FinancialTransaction() {
 
     }
 
-    public FinancialTransaction(String transactionId, String dataSubject, Integer amount, String recipient, ELong eventTime) {
+    public FinancialTransaction(String transactionId, String dataSubject, Integer amount, String recipient, Long eventTime) {
         this.transactionId = transactionId;
         this.dataSubject = dataSubject;
         this.amount = amount;
@@ -24,43 +24,43 @@ public class FinancialTransaction {
         this.eventTime = eventTime;
     }
 
-    public String gettransactionId() {
+    public String getTransactionId() {
         return transactionId;
     }
 
-    public void settransactionId(String transactionId) {
+    public void setTransactionId(String transactionId) {
         this.transactionId = transactionId;
     }
 
-    public String getdataSubject() {
+    public String getDataSubject() {
         return dataSubject;
     }
 
-    public void setdataSubject(String dataSubject) {
+    public void setDataSubject(String dataSubject) {
         this.dataSubject = dataSubject;
     }
 
-    public Integer getamount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setamount(Integer amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
-    public String getrecipient() {
+    public String getRecipient() {
         return recipient;
     }
 
-    public void setrecipient(String recipient) {
+    public void setRecipient(String recipient) {
         this.recipient = recipient;
     }
 
-    public ELong geteventTime() {
+    public Long getEventTime() {
         return eventTime;
     }
 
-    public void seteventTime(ELong eventTime) {
+    public void setEventTime(Long eventTime) {
         this.eventTime = eventTime;
     }
  

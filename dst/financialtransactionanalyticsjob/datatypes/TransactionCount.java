@@ -6,39 +6,39 @@ public class TransactionCount {
 
     private Integer nTransactions;
 
-    private ELong eventTime;
+    private Long eventTime;
  
     public TransactionCount() {
 
     }
 
-    public TransactionCount(String dataSubject, Integer nTransactions, ELong eventTime) {
+    public TransactionCount(String dataSubject, Integer nTransactions, Long eventTime) {
         this.dataSubject = dataSubject;
         this.nTransactions = nTransactions;
         this.eventTime = eventTime;
     }
 
-    public String getdataSubject() {
+    public String getDataSubject() {
         return dataSubject;
     }
 
-    public void setdataSubject(String dataSubject) {
+    public void setDataSubject(String dataSubject) {
         this.dataSubject = dataSubject;
     }
 
-    public Integer getnTransactions() {
+    public Integer getNTransactions() {
         return nTransactions;
     }
 
-    public void setnTransactions(Integer nTransactions) {
+    public void setNTransactions(Integer nTransactions) {
         this.nTransactions = nTransactions;
     }
 
-    public ELong geteventTime() {
+    public Long getEventTime() {
         return eventTime;
     }
 
-    public void seteventTime(ELong eventTime) {
+    public void setEventTime(Long eventTime) {
         this.eventTime = eventTime;
     }
  

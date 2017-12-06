@@ -6,39 +6,39 @@ public class TotalExpense {
 
     private Integer totalExpense;
 
-    private ELong eventTime;
+    private Long eventTime;
  
     public TotalExpense() {
 
     }
 
-    public TotalExpense(String dataSubject, Integer totalExpense, ELong eventTime) {
+    public TotalExpense(String dataSubject, Integer totalExpense, Long eventTime) {
         this.dataSubject = dataSubject;
         this.totalExpense = totalExpense;
         this.eventTime = eventTime;
     }
 
-    public String getdataSubject() {
+    public String getDataSubject() {
         return dataSubject;
     }
 
-    public void setdataSubject(String dataSubject) {
+    public void setDataSubject(String dataSubject) {
         this.dataSubject = dataSubject;
     }
 
-    public Integer gettotalExpense() {
+    public Integer getTotalExpense() {
         return totalExpense;
     }
 
-    public void settotalExpense(Integer totalExpense) {
+    public void setTotalExpense(Integer totalExpense) {
         this.totalExpense = totalExpense;
     }
 
-    public ELong geteventTime() {
+    public Long getEventTime() {
         return eventTime;
     }
 
-    public void seteventTime(ELong eventTime) {
+    public void setEventTime(Long eventTime) {
         this.eventTime = eventTime;
     }
  

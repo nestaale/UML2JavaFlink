@@ -5,9 +5,11 @@ import financialtransactionanalyticsjob.datatypes.TransactionCount;
 import financialtransactionanalyticsjob.datatypes.TotalExpense;
 import financialtransactionanalyticsjob.datatypes.FinancialTransaction;
 
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.util.Collector;
+
+
 
 public class TransactionParser extends RichMapFunction<String, FinancialTransaction> {
 
@@ -17,13 +19,14 @@ public class TransactionParser extends RichMapFunction<String, FinancialTransact
   }
 
   @Override
-  public FinancialTransactionFinancialTransaction map (String value) throws Exception {
-            String[] fields = s.split(",");
-        return new FinancialTransaction(
-                fields[0],
-                fields[1],
-                fields[2],
-                Long.parseLong(fields[3]),
-                Integer.parseInt(fields[4]));
+  public FinancialTransaction map (String value) throws Exception {
+                String[] fields = value.split(",");
+                return new FinancialTransaction(
+                        fields[0],
+                        fields[1],
+                        Integer.parseInt(fields[2]),
+                        fields[3],
+                        Long.parseLong(fields[4])
+                        );
   }
 }
