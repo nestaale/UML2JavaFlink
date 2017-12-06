@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Dataflow="http:///schemas/Dataflow/_pFZl4L_eEee-Z6aj51LN0Q/17" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/Dataflow/_pFZl4L_eEee-Z6aj51LN0Q/17 dataflow.profile.uml#_pFaM8L_eEee-Z6aj51LN0Q">
   <uml:Model xmi:id="_mCP0sL5vEeeec-L70t6MsQ" name="FinancialTransactionAnalyticsJob">
+    <packagedElement xmi:type="uml:Class" xmi:id="_lUxgEL8yEeeiPYi2CKr9zg" name="TransactionDataSource"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_UKWwoL5wEeeec-L70t6MsQ" name="TransactionParser"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_Y4XX4L5wEeeec-L70t6MsQ" name="ExpensesCalculator"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_vJ-YwL5wEeeec-L70t6MsQ" name="TransactionCounter"/>
@@ -8,6 +9,9 @@
     <packagedElement xmi:type="uml:Class" xmi:id="_38QtwL5wEeeec-L70t6MsQ" name="TotalExpensesSink"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_8UOMgL5wEeeec-L70t6MsQ" name="NumberOfTransactionsSink"/>
     <packagedElement xmi:type="uml:Class" xmi:id="_9-ANwL5wEeeec-L70t6MsQ" name="TopConsumersSink"/>
+    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_oy3XkL8yEeeiPYi2CKr9zg" name="rawTransactions" informationSource="_lUxgEL8yEeeiPYi2CKr9zg" informationTarget="_UKWwoL5wEeeec-L70t6MsQ">
+      <conveyed xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </packagedElement>
     <packagedElement xmi:type="uml:InformationFlow" xmi:id="_7-b30L5yEeeec-L70t6MsQ" name="transactions" conveyed="_HAgeIL5zEeeec-L70t6MsQ" informationSource="_UKWwoL5wEeeec-L70t6MsQ" informationTarget="_Y4XX4L5wEeeec-L70t6MsQ"/>
     <packagedElement xmi:type="uml:InformationFlow" xmi:id="_8qFc4L5yEeeec-L70t6MsQ" name="transactions" conveyed="_HAgeIL5zEeeec-L70t6MsQ" informationSource="_UKWwoL5wEeeec-L70t6MsQ" informationTarget="_vJ-YwL5wEeeec-L70t6MsQ"/>
     <packagedElement xmi:type="uml:InformationFlow" xmi:id="_-F56oL5yEeeec-L70t6MsQ" name="nTransactions" conveyed="_MgLL0L5zEeeec-L70t6MsQ" informationSource="_vJ-YwL5wEeeec-L70t6MsQ" informationTarget="_8UOMgL5wEeeec-L70t6MsQ"/>
@@ -63,10 +67,6 @@
         </ownedAttribute>
       </nestedClassifier>
     </packagedElement>
-    <packagedElement xmi:type="uml:Class" xmi:id="_lUxgEL8yEeeiPYi2CKr9zg" name="TransactionDataSource"/>
-    <packagedElement xmi:type="uml:InformationFlow" xmi:id="_oy3XkL8yEeeiPYi2CKr9zg" name="rawTransactions" informationSource="_lUxgEL8yEeeiPYi2CKr9zg" informationTarget="_UKWwoL5wEeeec-L70t6MsQ">
-      <conveyed xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
-    </packagedElement>
     <profileApplication xmi:type="uml:ProfileApplication" xmi:id="_N7zsQL6HEeeiPYi2CKr9zg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qa288L_eEee-Z6aj51LN0Q" source="PapyrusVersion">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qa288b_eEee-Z6aj51LN0Q" key="Version" value="0.0.18"/>
@@ -105,11 +105,11 @@
   </Dataflow:WindowedDataStream>
   <Dataflow:DataStream xmi:id="_tkQjcNngEeenW6PQeCFDhw" base_InformationFlow="__YdusL5yEeeec-L70t6MsQ"/>
   <Dataflow:DataStream xmi:id="_w1dOcNngEeenW6PQeCFDhw" base_InformationFlow="_-F56oL5yEeeec-L70t6MsQ"/>
+  <Dataflow:DataStream xmi:id="_QNsboNnsEeenW6PQeCFDhw" base_InformationFlow="_AbjjYL5zEeeec-L70t6MsQ"/>
   <Dataflow:WindowedDataStream xmi:id="_zndcANngEeenW6PQeCFDhw" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ">
     <window xmi:type="Dataflow:Window" xmi:id="_0MFzENngEeenW6PQeCFDhw">
       <size xmi:type="Dataflow:WindowSize" xmi:id="_00pA0NngEeenW6PQeCFDhw" size="3"/>
     </window>
   </Dataflow:WindowedDataStream>
   <Dataflow:KeyedDataStream xmi:id="_zoWM0NngEeenW6PQeCFDhw" base_InformationFlow="_8qFc4L5yEeeec-L70t6MsQ" key="_M2mSUL50Eeeec-L70t6MsQ"/>
-  <Dataflow:DataStream xmi:id="_QNsboNnsEeenW6PQeCFDhw" base_InformationFlow="_AbjjYL5zEeeec-L70t6MsQ"/>
 </xmi:XMI>
