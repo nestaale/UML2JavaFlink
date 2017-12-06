@@ -87,6 +87,9 @@ public class [aModel.name/] {
             [else]
           .timeWindow[if ((c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')._or(c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->last().eClass().name = 'NonParallelDataStream'))]All[/if](EventTimeSessionWindows.withGap(Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])))
             [/if]
+			[if datastream.eGet('window').eGet('isSessionInProcessingTime') = true]
+          .timeWindow[if ((c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')._or(c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->last().eClass().name = 'NonParallelDataStream'))]All[/if](ProcessingTimeSessionWindows.withGap(Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])))        
+			[/if]
           .apply(new [c.name/]())
           [/if]
         [/for]
