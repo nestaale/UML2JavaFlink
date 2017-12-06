@@ -71,20 +71,21 @@ public class [aModel.name/] {
 
     [else]
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
-       [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
+        [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
           [if datastream.eClass().name = 'KeyedDataStream' ]
           .keyBy("[datastream.eGet('key').eGet('name')/]")
           [/if]
+        [/for]
+        [for (datastream:EObject | c.getTargetDirectedRelationships().getStereotypeApplications()) ]
           [if datastream.eClass().name = 'WindowedDataStream' ]
             [if datastream.eGet('window').eGet('isSessionInEventTime') = false]
-   //[c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name/]
               [if datastream.eGet('window').eGet('isSliding') = false]
-          .timeWindow[if (c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
+          .timeWindow[if ((c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')._or(c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->last().eClass().name = 'NonParallelDataStream'))]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]))
               [else]
-          .timeWindow[if (c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]),Time.[datastream.eGet('window').eGet('slideSize').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('slideSize').eGet('size')/]))          
+          .timeWindow[if ((c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')._or(c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->last().eClass().name = 'NonParallelDataStream'))]All[/if](Time.[datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/]),Time.[datastream.eGet('window').eGet('slideSize').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('slideSize').eGet('size')/]))          
               [/if]
             [else]
-          .timeWindow[if (c.getSourceDirectedRelationships()->asOrderedSet()->first().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')]All[/if](EventTimeSessionWindows.withGap([datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])))
+          .timeWindow[if ((c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->first().eClass().name = 'NonParallelDataStream')._or(c.getTargetDirectedRelationships().getStereotypeApplications()->asOrderedSet()->last().eClass().name = 'NonParallelDataStream'))]All[/if](EventTimeSessionWindows.withGap([datastream.eGet('window').eGet('size').eGet('timeUnit').toString().toLower()/]([datastream.eGet('window').eGet('size').eGet('size')/])))
             [/if]
           .apply(new [c.name/]())
           [/if]
