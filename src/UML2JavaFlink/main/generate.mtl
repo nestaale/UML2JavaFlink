@@ -49,16 +49,6 @@ public class [aModel.name/] {
           .map(new [c.name/]());
           //.setParallelism([object.eGet('parallelism')/]);
 
-    [elseif object.eClass().name.strstr('FileWriter')]
-       [c.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('name')/]
-         [for (iskeyed:EObject | c.getTargetDirectedRelationships().getStereotypeApplications())]
-          [if iskeyed.eClass().name = 'KeyedDataStream' ]
-          .keyBy("[iskeyed.eGet('key').eGet('name')/]")
-          [/if]
-         [/for]
-          .writeAsText("[object.eGet('filepath')/]")
-          .setParallelism([object.eGet('parallelism')/]);
-
     [elseif object.eClass().name.strstr('TextFile')]
        [c.getTargetDirectedRelationships().eGet('name')/]
          [for (iskeyed:EObject | c.getTargetDirectedRelationships().getStereotypeApplications())]
