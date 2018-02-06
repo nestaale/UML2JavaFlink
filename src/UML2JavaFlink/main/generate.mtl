@@ -116,6 +116,7 @@ import [aClass.getModel().name.toLower()/].datatypes.[subc.name/];
     [/if]
   [/for]
 
+import org.apache.flink.util.Collector;
   [for (object:EObject | aClass.getStereotypeApplications()) ]
     [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
        [if attribute.name.equalsIgnoreCase('FlatMapFunction')]
@@ -138,12 +139,7 @@ import org.apache.flink.streaming.api.functions.windowing.RichAllWindowFunction;
          [/for]
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
        [/if]
-    [/for]
-  [/for]
-import org.apache.flink.util.Collector;
 
-  [for (object:EObject | aClass.getStereotypeApplications()) ]
-    [for (attribute:EAttribute | object.eClass().eAllAttributes) ]
 [if (object.eGet(attribute).toString().strstr('Map'))]
 import java.util.HashMap;
 import java.util.Map;
