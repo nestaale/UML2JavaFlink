@@ -140,10 +140,10 @@ import org.apache.flink.streaming.api.functions.windowing.RichAllWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
        [/if]
 
-[if (object.eGet(attribute).toString().strstr('Map'))]
+       [if (object.eGet(attribute).toString().strstr('Map'))]
 import java.util.HashMap;
 import java.util.Map;
-[/if]
+       [/if]
 
        [if attribute.name.strstr('Function')]
          [if attribute.name.equalsIgnoreCase('FlatmapFunction')]
@@ -183,9 +183,6 @@ public class [aClass.name.toUpperFirst()/] extends RichAllWindowFunction<[aClass
   }
 
   @Override
-[if attribute.name.strstr('mapFunction')]
-  public void [attribute.name.substring(1,attribute.name.size()-8)/] ([aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/] value, Collector<[aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> out) throws Exception {
-[elseif attribute.name.equalsIgnoreCase('applyFunction')]
          [for (dstype:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
 		  [if (dstype.eClass().name = 'WindowedDataStream')]
           [elseif (dstype.eClass().name = 'KeyedDataStream')]
@@ -195,7 +192,6 @@ public class [aClass.name.toUpperFirst()/] extends RichAllWindowFunction<[aClass
           [/if]
          [/for]
 
-[/if]
     [object.eGet(attribute).toString().substituteAll('\n', '\n    ')/]
   }
 }
