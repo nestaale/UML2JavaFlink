@@ -40,8 +40,12 @@ public class [aModel.name/] {
 [for (c:Class | aModel.eContents(Class)) ]
   [for (object:EObject | c.getStereotypeApplications()) ]
     [if object.eClass().name.strstr('DataTypes')]
-    [elseif object.eClass().name.strstr('DataSource')]  
+    [elseif object.eClass().name.strstr('SocketTextDataSource')]  
        DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = env.socketTextStream("[object.eGet('host')/]", [object.eGet('port')/])
+                .setParallelism([object.eGet('parallelism')/]);
+
+    [elseif object.eClass().name.strstr('TextFileDataSource')]  
+       DataStream<[c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/]> [c.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('name')/] = env.readTextFile("[object.eGet('pathToFile')/]")
                 .setParallelism([object.eGet('parallelism')/]);
 
     [elseif object.eClass().name.strstr('MapOperation')]  
