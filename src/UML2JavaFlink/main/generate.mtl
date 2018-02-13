@@ -169,11 +169,11 @@ public class [aClass.name.toUpperFirst()/] extends RichMapFunction<[aClass.getTa
 }
          [elseif attribute.name.equalsIgnoreCase('applyFunction')]
          [for (dstype:EObject | aClass.getTargetDirectedRelationships().getStereotypeApplications())]
-		  [if (dstype.eClass().name = 'WindowedDataStream')]
-          [elseif (dstype.eClass().name = 'KeyedDataStream')]
-public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], Tuple, TimeWindow> {
-          [else]
+          [if (dstype.eClass().name = 'WindowedDataStream')]
+          [elseif (dstype.eClass().name = 'NonParallelDataStream')]
 public class [aClass.name.toUpperFirst()/] extends RichAllWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], TimeWindow> {
+          [else]
+public class [aClass.name.toUpperFirst()/] extends RichWindowFunction<[aClass.getTargetDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], [aClass.getSourceDirectedRelationships()->asOrderedSet()->first().eGet('conveyed').name/], Tuple, TimeWindow> {
           [/if]
         [/for]
 
